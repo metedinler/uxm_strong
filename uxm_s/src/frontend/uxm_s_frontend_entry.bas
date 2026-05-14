@@ -23,12 +23,16 @@ Type UXSFrontendStats
     astNodeCount As Long
     addressValidCount As Long
     addressInvalidCount As Long
+    metaCount As Long
+    stringCount As Long
+    commandCount As Long
 End Type
 
 Dim Shared g_uxsLastError As String
 Dim Shared g_uxsLastStats As UXSFrontendStats
 Dim Shared g_uxsTokens() As UXSFrontendToken
 Dim Shared g_uxsTokenCount As Long
+Dim Shared g_uxsLexError As String
 
 Function UXS_IsDigit(ByVal ch As String) As Long
     Return IIf(ch >= "0" And ch <= "9", -1, 0)
@@ -55,6 +59,7 @@ Sub UXS_Lex(ByVal sourceText As String)
     Dim co As Long = 1
     ReDim g_uxsTokens(0 To 255) As UXSFrontendToken
     g_uxsTokenCount = 0
+    g_uxsLexError = ""
 
     While p <= Len(sourceText)
         Dim ch As String = Mid(sourceText, p, 1)
@@ -116,6 +121,10 @@ Sub UXS_Lex(ByVal sourceText As String)
                     p += 1
                     co += 1
                 Wend
+                If bal <> 0 Then
+                    g_uxsLexError = "Lexer hatasi: kapanmayan meta parantezi"
+                    Exit Sub
+                End If
             Else
                 While p <= Len(sourceText) And UXS_IsDigit(Mid(sourceText, p, 1))
                     p += 1
@@ -127,6 +136,7 @@ Sub UXS_Lex(ByVal sourceText As String)
         End If
 
         If ch = Chr(34) Then
+            Dim closed As Long = 0
             p += 1
             co += 1
             While p <= Len(sourceText)
@@ -139,11 +149,16 @@ Sub UXS_Lex(ByVal sourceText As String)
                 If cs = Chr(34) Then
                     p += 1
                     co += 1
+                    closed = -1
                     Exit While
                 End If
                 p += 1
                 co += 1
             Wend
+            If closed = 0 Then
+                g_uxsLexError = "Lexer hatasi: kapanmayan string literal"
+                Exit Sub
+            End If
             UXS_AddToken UXS_TOK_STRING, Mid(sourceText, startP, p - startP), ln, startC
             Continue While
         End If
@@ -183,15 +198,23 @@ Function UXS_ParseToUIR(ByRef nodeCount As Long, ByRef errText As String) As Lon
     Dim loopDepth As Long = 0
     nodeCount = 0
     errText = ""
+    g_uxsLastStats.metaCount = 0
+    g_uxsLastStats.stringCount = 0
+    g_uxsLastStats.commandCount = 0
 
     For i = 1 To g_uxsTokenCount
         Select Case g_uxsTokens(i).kind
-        Case UXS_TOK_META, UXS_TOK_STRING
+        Case UXS_TOK_META
             nodeCount += 1
+            g_uxsLastStats.metaCount += 1
+        Case UXS_TOK_STRING
+            nodeCount += 1
+            g_uxsLastStats.stringCount += 1
         Case UXS_TOK_SYMBOL
             Dim ch As String = g_uxsTokens(i).text
             If UXS_IsAstCommand(ch) Then
                 nodeCount += 1
+                g_uxsLastStats.commandCount += 1
                 If ch = "[" Then loopDepth += 1
                 If ch = "]" Then
                     loopDepth -= 1
@@ -287,6 +310,18 @@ Function UXS_FrontendStatAddressInvalidCount() As Long
     Return g_uxsLastStats.addressInvalidCount
 End Function
 
+Function UXS_FrontendStatMetaCount() As Long
+    Return g_uxsLastStats.metaCount
+End Function
+
+Function UXS_FrontendStatStringCount() As Long
+    Return g_uxsLastStats.stringCount
+End Function
+
+Function UXS_FrontendStatCommandCount() As Long
+    Return g_uxsLastStats.commandCount
+End Function
+
 ' Tek frontend kapisi: kaynak -> UIR
 function UXS_FrontendBuildUIR(byval sourceText as String) as Long
     g_uxsLastError = ""
@@ -294,6 +329,9 @@ function UXS_FrontendBuildUIR(byval sourceText as String) as Long
     g_uxsLastStats.astNodeCount = 0
     g_uxsLastStats.addressValidCount = 0
     g_uxsLastStats.addressInvalidCount = 0
+    g_uxsLastStats.metaCount = 0
+    g_uxsLastStats.stringCount = 0
+    g_uxsLastStats.commandCount = 0
 
     if Len(sourceText)=0 then
         g_uxsLastError = "Kaynak bos oldugu icin frontend UIR uretemedi."
@@ -301,6 +339,10 @@ function UXS_FrontendBuildUIR(byval sourceText as String) as Long
     end if
 
     UXS_Lex sourceText
+    If Len(g_uxsLexError) > 0 Then
+        g_uxsLastError = g_uxsLexError
+        Return 0
+    End If
     g_uxsLastStats.tokenCount = g_uxsTokenCount
     If g_uxsTokenCount <= 0 Then
         g_uxsLastError = "Lexer token uretemedi."
