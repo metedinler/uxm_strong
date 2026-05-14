@@ -93,3 +93,26 @@ Bu plan 5 hamleyi geçmez.
 ## 5) Kısa Sonuç
 
 Bu proje 4 aşamalı ana plana sahip. Şu an Asama-3 için en kritik ihtiyaç, komut-adresleme-branch-servis-çıktı zincirlerini tek bir resmi plan ve tek bir teknik sözleşmede toplamak. Böylece kalan kodlama işleri 5 hamlede yürütülebilir hale gelir.
+
+## 6) Asama-3 Kapanis Durum Matrisi
+
+1. Komut sozlesmesi tek merkezde kilitli degildi: KAPATILDI
+Referans: `uxm_s/contracts/UXM_C_BIRLESIK_SOZLESME_V1_TR.md`
+
+2. Adresleme modu sozlesmesi daginikti: KAPATILDI
+Referans: `uxm_s/contracts/ADRESLEME_STANDARTI_TR.md`, `uxm_s/contracts/UXM_C_BIRLESIK_SOZLESME_V1_TR.md`
+
+3. Branch parse/validate/emit icin tek resmi plan yoktu: KAPATILDI
+Referans: `uxm_s/contracts/UXM_C_BIRLESIK_SOZLESME_V1_TR.md`
+
+4. Servis 65535 ust sinir sozlesmesi yoktu: KAPATILDI
+Referans: `uxm_s/src/core/service_registry/uxm_v20_service_registry.bi`
+
+5. JSON/ASM/OBJ/EXE cikti hatlari tek sozlesmede degildi: KAPATILDI
+Referans: `uxm_s/contracts/UXM_C_BIRLESIK_SOZLESME_V1_TR.md`, `uxm_s/src/backends/ide_json/uxm_s_ide_json_backend.bas`
+
+6. `.plan.md` append-only kayit tek yerde toplanmamisdi: KAPATILDI
+Referans: `uxm_s/reports/ASAMA3_PLAN_KAYDI.plan.md`
+
+7. Asama-3 net giris-cikis kriterleri birlesik degildi: KAPATILDI
+Referans: `uxm_s/reports/ASAMA3_GIRIS_CIKIS_KRITERLERI_TR.md`
