@@ -7,7 +7,7 @@ ve her komut için "anlamlı" ve "anlamsız" örnek çağrı/işlem satırı ür
 Amaç: komutların kullanım örneklerini görsel olarak sunmak (gerçek çağrı yapmaz).
 
 Çalıştırma:
-    py -3 tests\uxm_v33_command_examples.py
+    py -3 tests/uxm_v33_command_examples.py
 """
 
 import re
