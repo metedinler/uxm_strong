@@ -1,0 +1,81 @@
+eval --expr '1 ! 2'
+eval --expr '1 $ 2'
+eval --expr '1 % 2'
+eval --expr '1 & 2'
+eval --expr '1 * 2'
+eval --expr '1 + 2'
+eval --expr '1 , 2'
+eval --expr '1 - 2'
+eval --expr '1 . 2'
+eval --expr '1 / 2'
+uxm --cmd 0 --help
+eval --expr '1 ; 2'
+eval --expr '1 < 2'
+eval --expr '1 > 2'
+eval --expr '1 ? 2'
+eval --expr '1 @ 2'
+uxm --cmd @# --help
+uxm --cmd @* --help
+uxm --cmd @@ --help
+uxm --op OP_AND --src sample.bin --dst out.bin
+uxm --op OP_BRANCH --src sample.bin --dst out.bin
+uxm --op OP_CLEAR --src sample.bin --dst out.bin
+uxm --op OP_DEC --src sample.bin --dst out.bin
+uxm --op OP_EQ --src sample.bin --dst out.bin
+uxm --op OP_GETC --src sample.bin --dst out.bin
+uxm --op OP_GT --src sample.bin --dst out.bin
+uxm --op OP_INC --src sample.bin --dst out.bin
+uxm --op OP_LEFT --src sample.bin --dst out.bin
+uxm --op OP_LOOP_BEG --src sample.bin --dst out.bin
+uxm --op OP_LOOP_END --src sample.bin --dst out.bin
+uxm --op OP_LT --src sample.bin --dst out.bin
+uxm --op OP_META --src sample.bin --dst out.bin
+uxm --op OP_NOP --src sample.bin --dst out.bin
+uxm --op OP_NOT --src sample.bin --dst out.bin
+uxm --op OP_OR --src sample.bin --dst out.bin
+uxm --op OP_POP --src sample.bin --dst out.bin
+uxm --op OP_PRINT_STRING --src sample.bin --dst out.bin
+uxm --op OP_PUSH --src sample.bin --dst out.bin
+uxm --op OP_PUTC --src sample.bin --dst out.bin
+uxm --op OP_RIGHT --src sample.bin --dst out.bin
+uxm --op OP_SHL --src sample.bin --dst out.bin
+uxm --op OP_SHR --src sample.bin --dst out.bin
+uxm --op OP_STATUS --src sample.bin --dst out.bin
+uxm --op OP_XOR --src sample.bin --dst out.bin
+eval --expr '1 [ 2'
+eval --expr '1 \\ 2'
+eval --expr '1 ] 2'
+eval --expr '1 ^ 2'
+math_eval --fn abs --arg 3.14
+math_eval --fn cos --arg 3.14
+uxm --cmd e --help
+uxm --cmd end --help
+math_eval --fn exp --arg 3.14
+math_eval --fn log --arg 3.14
+uxm --cmd n --help
+math_eval --fn neg --arg 3.14
+math_eval --fn pow --arg 3.14
+regtool --set r 0x12345678
+regtool --set r10 0x12345678
+regtool --set r11 0x12345678
+regtool --set r12 0x12345678
+regtool --set r13 0x12345678
+regtool --set r14 0x12345678
+regtool --set r15 0x12345678
+regtool --set r8 0x12345678
+regtool --set r9 0x12345678
+regtool --set rax 0x12345678
+regtool --set rbx 0x12345678
+regtool --set rcx 0x12345678
+regtool --set rdi 0x12345678
+regtool --set rdx 0x12345678
+regtool --set rsi 0x12345678
+math_eval --fn sin --arg 3.14
+math_eval --fn sqrt --arg 3.14
+uxm --cmd t --help
+math_eval --fn tan --arg 3.14
+uxm --cmd x --help
+eval --expr '1 { 2'
+eval --expr '1 | 2'
+eval --expr '1 } 2'
+eval --expr '1 ~ 2'

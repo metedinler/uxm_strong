@@ -11,6 +11,7 @@ Amaç: komutların kullanım örneklerini görsel olarak sunmak (gerçek çağr�
 """
 
 import re
+import argparse
 from pathlib import Path
 
 MD = Path('reports/UXM_V33_UXM_S_HAT_KARSI_TR.md')
@@ -48,12 +49,32 @@ def simulate(cmd):
 
 
 def main():
+    parser = argparse.ArgumentParser(description='Generate examples for V33 commands and optionally write meaningful ones to a file.')
+    parser.add_argument('-o', '--out', default='uxm', help='Output file to write (default: uxm)')
+    parser.add_argument('--mode', choices=['meaningful', 'both'], default='meaningful', help='Write only meaningful commands or both meaningful and nonsense')
+    args = parser.parse_args()
+
+    out_path = Path(args.out)
+    lines_to_write = []
+
     for cmd in commands:
         safe = re.sub(r'[^0-9A-Za-z_]', '_', cmd)
+        meaningful = simulate(cmd)
+        nonsense = f"run_random --{safe} foo bar"
+
         print('===', cmd)
-        print('Meaningful:', simulate(cmd))
-        print('Nonsense:  ', f"run_random --{safe} foo bar")
+        print('Meaningful:', meaningful)
+        print('Nonsense:  ', nonsense)
         print()
+
+        if args.mode in ('meaningful', 'both'):
+            lines_to_write.append(meaningful)
+        if args.mode == 'both':
+            lines_to_write.append(nonsense)
+
+    if lines_to_write:
+        out_path.write_text('\n'.join(lines_to_write), encoding='utf-8')
+        print(f"Wrote {len(lines_to_write)} lines to {out_path}")
 
 if __name__ == '__main__':
     main()
